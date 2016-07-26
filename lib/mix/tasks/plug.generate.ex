@@ -12,24 +12,31 @@ defmodule Mix.Tasks.Plug.Generate do
   name.
   """
   def run(args) do
-    module =
-      args
-      |> Enum.at(0)
-      |> inflect
-
-    [module: module]
-    |> render("app.ex")
-    |> output("/tmp/my_app.ex")
+    %{files: files, context: context} = parse_args(args)
+    files |> Enum.each(&render(&1, context))
   end
 
-  defp render(context, file_name) do
-    "priv/templates/generate/#{file_name}"
-    |> EEx.eval_file(context)
+  defp render(%{template: template, target: target}, context) do
+    EEx.eval_file(template, context)
+    |> output(target)
   end
 
   defp output(contents, file_path) do
     # Mix.shell.info contents
-    File.write!(file_path, contents)
+    # File.write!(file_path, contents)
+    Mix.Generator.create_file(file_path, contents)
+  end
+
+  defp parse_args(args) do
+    app_name = args |> Enum.at(0)
+    module = app_name |> inflect
+    %{
+      files: [
+        %{template: "priv/templates/generate/app.ex", target: "lib/#{app_name}.ex"},
+        %{template: "priv/templates/generate/router.ex", target: "lib/#{app_name}/router.ex"}
+      ],
+      context: [module: module]
+    }
   end
 
   defp inflect(name) do
