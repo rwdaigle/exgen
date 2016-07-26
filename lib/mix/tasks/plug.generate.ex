@@ -17,8 +17,7 @@ defmodule Mix.Tasks.Plug.Generate do
   end
 
   defp render(%{template: template, target: target}, context) do
-    EEx.eval_file(template, context)
-    |> output(target)
+    EEx.eval_file(template, context) |> output(target)
   end
 
   defp output(contents, file_path) do
