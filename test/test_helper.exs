@@ -11,6 +11,10 @@ defmodule MixHelper do
     File.cd! path, function
   end
 
+  def in_dir(path, function) do
+    File.cd! path, function
+  end
+
   def assert_file(file) do
     assert File.regular?(file), "Expected #{file} to exist, but does not"
   end
