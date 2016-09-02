@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Plug.Generate do
+defmodule Mix.Tasks.Plug.GenerateTest do
 
   use ExUnit.Case
   import MixHelper
@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Plug.Generate do
 
   test "generates app" do
 
-    in_tmp "generates app", fn ->
+    in_tmp "generate-app", fn ->
       Mix.Tasks.Plug.Generate.run ["some_app"]
 
       assert_file "lib/some_app.ex", fn file ->

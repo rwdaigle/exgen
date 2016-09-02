@@ -4,8 +4,8 @@ ExUnit.start()
 defmodule MixHelper do
   import ExUnit.Assertions
 
-  def in_tmp(which, function) do
-    path = Path.join(System.tmp_dir!, which)
+  def in_tmp(subdir, function) do
+    path = Path.join(System.tmp_dir!, subdir)
     File.rm_rf! path
     File.mkdir_p! path
     File.cd! path, function
