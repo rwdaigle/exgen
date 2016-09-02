@@ -9,7 +9,7 @@ While the goal is to eventually provide more customizable options/templates that
 Install the plug tasks Mix archive:
 
 ```bash
-$ mix archives.install https://github.com/rwdaigle/plug_tasks/archives/raw/master/plug_tasks.ez
+$ mix archive.install https://github.com/rwdaigle/plug_tasks/raw/master/archives/plug_tasks-0.1.0.ez
 ```
 
 The tasks will then be available via Mix:
@@ -41,6 +41,6 @@ $ mix plug.generate test_app
 Plug tasks are distributed as a mix archive. Build the archive with:
 
 ```bash
-$ mix archive.build -o ./archives/plug_tasks-0.1.0.ez
-$ cp ./archives/plug_tasks-0.1.0.ez ./archives/plug_tasks.ez
+$ mix archive.build
+$ mv plug_tasks-*.ez archives/
 ```
