@@ -23,8 +23,6 @@ defmodule Mix.Tasks.Plug.Generate do
   end
 
   defp output(contents, file_path) do
-    # Mix.shell.info contents
-    # File.write!(file_path, contents)
     Mix.Generator.create_file(file_path, contents)
   end
 
