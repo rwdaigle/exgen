@@ -11,12 +11,16 @@ defmodule Mix.Tasks.Plug.GenerateTest do
   test "generates app in current dir" do
 
     in_tmp "generate-app", fn ->
-      Mix.Tasks.Plug.Generate.run ["some_app"]
 
-      assert_file "lib/some_app.ex", fn file ->
-        assert file =~ "defmodule SomeApp do"
-        assert file =~ "worker(SomeApp.Router, [])"
-        assert file =~ "opts = [strategy: :one_for_one, name: SomeApp.Supervisor]"
+      app_name = "some_app"
+      Mix.Tasks.Plug.Generate.run [app_name]
+
+      in_dir app_name, fn ->
+        assert_file "lib/some_app.ex", fn file ->
+          assert file =~ "defmodule SomeApp do"
+          assert file =~ "worker(SomeApp.Router, [])"
+          assert file =~ "opts = [strategy: :one_for_one, name: SomeApp.Supervisor]"
+        end
       end
     end
   end
