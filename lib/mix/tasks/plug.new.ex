@@ -33,8 +33,8 @@ defmodule Mix.Tasks.Plug.New do
     module = app_name |> inflect
     %{
       files: [
-        %{template: "priv/templates/new/app.ex", target: "lib/#{app_name}.ex"},
-        %{template: "priv/templates/new/router.ex", target: "lib/#{app_name}/router.ex"}
+        %{template: "priv/templates/default/new/app.ex", target: "lib/#{app_name}.ex"},
+        %{template: "priv/templates/default/new/router.ex", target: "lib/#{app_name}/router.ex"}
       ],
       context: [module: module],
       dir: app_path
