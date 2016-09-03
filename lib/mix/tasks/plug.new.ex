@@ -28,17 +28,26 @@ defmodule Mix.Tasks.Plug.New do
   end
 
   defp parse_args(args) do
-    app_path = args |> Enum.at(0)
-    app_name = app_path |> Path.basename
-    module = app_name |> inflect
-    %{
-      files: [
-        %{template: "priv/templates/default/new/app.ex", target: "lib/#{app_name}.ex"},
-        %{template: "priv/templates/default/new/router.ex", target: "lib/#{app_name}/router.ex"}
-      ],
-      context: [module: module],
-      dir: app_path
-    }
+
+    switches = [template: :string]
+    {opts, args, _} = OptionParser.parse(args, switches: switches, aliases: [t: :template])
+
+    default_opts = [template: :default]
+    opts = Keyword.merge(default_opts, opts)
+
+    with app_path <- Enum.at(args, 0),
+         app_name <- Path.basename(app_path),
+         module <- inflect(app_name),
+         template <- opts[:template] do
+      %{
+        files: [
+          %{template: "priv/templates/#{template}/new/app.ex", target: "lib/#{app_name}.ex"},
+          %{template: "priv/templates/#{template}/new/router.ex", target: "lib/#{app_name}/router.ex"}
+        ],
+        context: [module: module],
+        dir: app_path
+      }
+    end
   end
 
   defp inflect(name) do
