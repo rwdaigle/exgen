@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.Plug.NewTest do
 
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   import MixHelper
   import ExUnit.CaptureIO
 
