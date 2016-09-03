@@ -12,19 +12,13 @@ defmodule Mix.Tasks.Plug.New do
   name.
   """
   def run(args) do
-    %{files: files, context: context, dir: dir} = parse_args(args)
-    files |> Enum.each(&render(&1, context, dir))
+    %{files: files, context: context} = parse_args(args)
+    files |> Enum.each(&render(&1, context))
   end
 
-  defp render(%{template: template, target: target}, context, dir) do
-    Path.expand("../../../#{template}", __DIR__)
-    |> EEx.eval_file(context)
-    |> output(dir, target)
-  end
-
-  defp output(contents, dir, rel_path) do
-    Path.expand(rel_path, dir)
-    |> Mix.Generator.create_file(contents)
+  defp render(%{template: template, target: target}, context) do
+    rendered = template |> EEx.eval_file(context)
+    Mix.Generator.create_file(target, rendered)
   end
 
   defp parse_args(args) do
@@ -39,15 +33,48 @@ defmodule Mix.Tasks.Plug.New do
          app_name <- Path.basename(app_path),
          module <- inflect(app_name),
          template <- opts[:template] do
+
+      files =
+        Path.expand("../../../priv/templates/new/#{template}", __DIR__)
+        |> template_files(app_path, app_name)
+
       %{
-        files: [
-          %{template: "priv/templates/#{template}/new/app.ex", target: "lib/#{app_name}.ex"},
-          %{template: "priv/templates/#{template}/new/router.ex", target: "lib/#{app_name}/router.ex"}
-        ],
-        context: [module: module],
-        dir: app_path
+        files: files,
+        context: [app_name: app_name, module: module]
       }
     end
+  end
+
+  defp template_files(template_path, target_root, app_name) do
+    template_path
+    |> ls_r
+    |> Enum.map(fn(file) -> %{template: file, target: target_file(file, template_path, target_root, app_name)} end)
+  end
+
+  defp target_file(template_file, template_path, target_root, app_name) do
+    template_file
+    |> String.replace_prefix(template_path, target_root)
+    |> String.replace("app_name", app_name)
+  end
+
+  defp ls_r(path), do: ls_r(path, File.ls!(path), [])
+  defp ls_r(path, [], acc), do: acc
+  defp ls_r(path, files, acc) do
+    regular_files =
+      files
+      |> Enum.map(fn(file) -> Path.expand(file, path) end)
+      |> Enum.filter(&File.regular?/1)
+
+    sub_files =
+      files
+      |> Enum.map(fn(file) -> Path.expand(file, path) end)
+      |> Enum.filter(&File.dir?/1)
+      |> Enum.map(fn(subdir) -> ls_r(subdir, File.ls!(subdir), acc) end)
+      |> Enum.reduce([], fn(subfiles, acc) -> Enum.into(acc, subfiles) end)
+
+    acc
+    |> Enum.into(sub_files)
+    |> Enum.into(regular_files)
   end
 
   defp inflect(name) do

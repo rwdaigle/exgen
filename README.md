@@ -51,3 +51,10 @@ Plug tasks are distributed as a mix archive. Build the archive with:
 $ mix archive.build
 $ mv plug_tasks-*.ez archives/
 ```
+
+## Todo
+
+Some things I'd like to add include:
+
+* Test by booting actual app and confirming request/responses
+* Allow for non-repo based templates (URL, local FS, etc...)

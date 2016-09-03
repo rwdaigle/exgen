@@ -14,8 +14,6 @@ defmodule <%= module %>.Router do
     options
   end
 
-  # forward "/api", to: <%= module %>.Routers.Api
-
   get "/" do
     conn
     |> put_resp_content_type("text/html")
