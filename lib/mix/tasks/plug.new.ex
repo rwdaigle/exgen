@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Plug.Generate do
+defmodule Mix.Tasks.Plug.New do
   use Mix.Task
 
   @shortdoc "Generate a simple plug app"
@@ -6,7 +6,7 @@ defmodule Mix.Tasks.Plug.Generate do
   @moduledoc """
   Generate a simple plug app
 
-      $ mix plug.generate new_app
+      $ mix plug.new ./new_app
 
   The default router is inflected from the application
   name.
@@ -33,8 +33,8 @@ defmodule Mix.Tasks.Plug.Generate do
     module = app_name |> inflect
     %{
       files: [
-        %{template: "priv/templates/generate/app.ex", target: "lib/#{app_name}.ex"},
-        %{template: "priv/templates/generate/router.ex", target: "lib/#{app_name}/router.ex"}
+        %{template: "priv/templates/new/app.ex", target: "lib/#{app_name}.ex"},
+        %{template: "priv/templates/new/router.ex", target: "lib/#{app_name}/router.ex"}
       ],
       context: [module: module],
       dir: app_path

@@ -16,7 +16,7 @@ The tasks will then be available via Mix:
 
 ```bash
 $ mix -h | grep "plug."
-mix plug.generate     # Generate a simple plug app
+mix plug.new     # Generate a simple plug app
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ mix plug.generate     # Generate a simple plug app
 To generate a Plug app template, pass in the root app path. The app name will be inferred from the path.
 
 ```bash
-$ mix plug.generate ./some_app
+$ mix plug.new ./some_app
 * creating some_app/lib/some_app.ex
 * creating some_app/lib/some_app/router.ex
 ```

@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Plug.GenerateTest do
+defmodule Mix.Tasks.Plug.NewTest do
 
   use ExUnit.Case
   import MixHelper
@@ -10,10 +10,10 @@ defmodule Mix.Tasks.Plug.GenerateTest do
 
   test "generates app in current dir" do
 
-    in_tmp "generate-app", fn ->
+    in_tmp "new-app", fn ->
 
       app_name = "some_app"
-      Mix.Tasks.Plug.Generate.run [app_name]
+      Mix.Tasks.Plug.New.run [app_name]
 
       in_dir app_name, fn ->
         assert_file "lib/some_app.ex", fn file ->
@@ -27,10 +27,10 @@ defmodule Mix.Tasks.Plug.GenerateTest do
 
   test "generates app in relative dir" do
 
-    in_tmp "generate-app", fn ->
+    in_tmp "new-app", fn ->
 
       dir = "./test/some_app"
-      Mix.Tasks.Plug.Generate.run [dir]
+      Mix.Tasks.Plug.New.run [dir]
 
       in_dir dir, fn ->
         assert_file "lib/some_app.ex", fn file ->
