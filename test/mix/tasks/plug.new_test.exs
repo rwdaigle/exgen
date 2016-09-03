@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Plug.NewTest do
     :ok
   end
 
-  test "generates app in current dir" do
+  test "generate simple app in current dir" do
 
     in_tmp "new-app", fn ->
 
@@ -17,15 +17,14 @@ defmodule Mix.Tasks.Plug.NewTest do
 
       in_dir app_name, fn ->
         assert_file "lib/some_app.ex", fn file ->
-          assert file =~ "defmodule SomeApp do"
-          assert file =~ "worker(SomeApp.Router, [])"
-          assert file =~ "opts = [strategy: :one_for_one, name: SomeApp.Supervisor]"
+          template_path = Path.expand("../../../priv/templates/new/app.ex", __DIR__)
+          assert file == render(template_path, [module: "SomeApp"])
         end
       end
     end
   end
 
-  test "generates app in relative dir" do
+  test "generate app in relative dir" do
 
     in_tmp "new-app", fn ->
 
@@ -34,11 +33,14 @@ defmodule Mix.Tasks.Plug.NewTest do
 
       in_dir dir, fn ->
         assert_file "lib/some_app.ex", fn file ->
-          assert file =~ "defmodule SomeApp do"
-          assert file =~ "worker(SomeApp.Router, [])"
-          assert file =~ "opts = [strategy: :one_for_one, name: SomeApp.Supervisor]"
+          template_path = Path.expand("../../../priv/templates/new/app.ex", __DIR__)
+          assert file == render(template_path, [module: "SomeApp"])
         end
       end
     end
+  end
+
+  defp render(path, context) do
+    EEx.eval_file(path, context)
   end
 end
