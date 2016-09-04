@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Plug.New do
   use Mix.Task
+  import Mix.PlugTasks
 
   @shortdoc "Generate a simple plug app"
 
@@ -55,26 +56,6 @@ defmodule Mix.Tasks.Plug.New do
     template_file
     |> String.replace_prefix(template_path, target_root)
     |> String.replace("app_name", app_name)
-  end
-
-  defp ls_r(path), do: ls_r(path, File.ls!(path), [])
-  defp ls_r(path, [], acc), do: acc
-  defp ls_r(path, files, acc) do
-    regular_files =
-      files
-      |> Enum.map(fn(file) -> Path.expand(file, path) end)
-      |> Enum.filter(&File.regular?/1)
-
-    sub_files =
-      files
-      |> Enum.map(fn(file) -> Path.expand(file, path) end)
-      |> Enum.filter(&File.dir?/1)
-      |> Enum.map(fn(subdir) -> ls_r(subdir, File.ls!(subdir), acc) end)
-      |> Enum.reduce([], fn(subfiles, acc) -> Enum.into(acc, subfiles) end)
-
-    acc
-    |> Enum.into(sub_files)
-    |> Enum.into(regular_files)
   end
 
   defp inflect(name) do
