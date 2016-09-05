@@ -9,7 +9,7 @@ While the goal is to eventually provide more customizable options/templates that
 Install the plug tasks Mix archive:
 
 ```bash
-$ mix archive.install https://github.com/rwdaigle/plug_tasks/raw/master/archives/plug_tasks-0.2.0.ez
+$ mix archive.install https://github.com/rwdaigle/plug_tasks/raw/master/archives/plug_tasks-0.3.0.ez
 ```
 
 The tasks will then be available via Mix:
