@@ -1,7 +1,6 @@
 defmodule Templates.JsonApiTest do
 
   use ExUnit.Case, async: true
-  import MixHelper
   import ExUnit.CaptureIO
   import Mix.PlugTasks
   use Plug.Test

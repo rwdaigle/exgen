@@ -56,4 +56,5 @@ $ mv plug_tasks-*.ez archives/
 
 Some things I'd like to add include:
 
-* Allow for non-repo based templates (git repo, URL, local FS, etc...)
+* Make this a more general purpose generator library
+* Rename it to exgen

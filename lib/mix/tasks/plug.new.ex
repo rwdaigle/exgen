@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Plug.New do
   end
 
   defp render(%{template: template, target: target}, context) do
-    rendered = template |> EEx.eval_file(context)
+    rendered = template |> IO.inspect |> EEx.eval_file(context)
     Mix.Generator.create_file(target, rendered)
   end
 
@@ -27,7 +27,7 @@ defmodule Mix.Tasks.Plug.New do
     switches = [template: :string]
     {opts, args, _} = OptionParser.parse(args, switches: switches, aliases: [t: :template])
 
-    default_opts = [template: :default]
+    default_opts = [template: "default"]
     opts = Keyword.merge(default_opts, opts)
 
     with app_path <- Enum.at(args, 0),
@@ -35,9 +35,7 @@ defmodule Mix.Tasks.Plug.New do
          module <- inflect(app_name),
          template <- opts[:template] do
 
-      files =
-        Path.expand("../../../priv/templates/new/#{template}", __DIR__)
-        |> template_files(app_path, app_name)
+      files = template_path(template) |> template_files(app_path, app_name)
 
       %{
         files: files,
@@ -46,9 +44,20 @@ defmodule Mix.Tasks.Plug.New do
     end
   end
 
+  defp template_path(template) do
+    cond do
+      String.ends_with?(template, ".git") ->
+        tmp_dir = in_tmp fn -> System.cmd("git", ["clone", template, "exgen"]) end
+        "#{tmp_dir}/exgen"
+      true ->
+        Path.expand("../../../priv/templates/new/#{template}", __DIR__)
+    end
+  end
+
   defp template_files(template_path, target_root, app_name) do
     template_path
     |> ls_r
+    |> Enum.filter(fn(file) -> !String.contains?(file, ".git/") end)
     |> Enum.map(fn(file) -> %{template: file, target: target_file(file, template_path, target_root, app_name)} end)
   end
 

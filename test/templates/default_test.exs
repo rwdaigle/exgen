@@ -1,7 +1,6 @@
 defmodule Templates.DefaultTest do
 
   use ExUnit.Case, async: true
-  import MixHelper
   import ExUnit.CaptureIO
   import Mix.PlugTasks
   import Plug.Conn

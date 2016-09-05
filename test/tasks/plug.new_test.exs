@@ -3,6 +3,7 @@ defmodule Mix.Tasks.Plug.NewTest do
   use ExUnit.Case
   import MixHelper
   import ExUnit.CaptureIO
+  import Mix.PlugTasks
 
   setup do
     Mix.Task.clear
@@ -36,7 +37,7 @@ defmodule Mix.Tasks.Plug.NewTest do
 
     test "generates default app in current dir" do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Plug.New.run ["some_app"] end
+        capture_io fn -> Mix.Tasks.Plug.New.run ["some_app", "-t", "default"] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
         assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
         assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
@@ -46,11 +47,34 @@ defmodule Mix.Tasks.Plug.NewTest do
 
     test "generates default app in relative dir" do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Plug.New.run ["./test/some_app"] end
+        capture_io fn -> Mix.Tasks.Plug.New.run ["./test/some_app", "-t", "default"] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
         assert_rendered_template("test/some_app/mix.exs", "new/default/mix.exs", expected_context)
         assert_rendered_template("test/some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
         assert_rendered_template("test/some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
+      end
+    end
+  end
+
+  describe "plug.new from git repo" do
+
+    test "generates default app using git@ URL" do
+      in_tmp fn ->
+        capture_io fn -> Mix.Tasks.Plug.New.run ["some_app", "-t", "git@github.com:rwdaigle/exgen-plug-default.git"] end
+        expected_context = [app_name: "some_app", module: "SomeApp"]
+        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
+        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
+        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
+      end
+    end
+
+    test "generates default app using http URL" do
+      in_tmp fn ->
+        capture_io fn -> Mix.Tasks.Plug.New.run ["some_app", "-t", "https://github.com/rwdaigle/exgen-plug-default.git"] end
+        expected_context = [app_name: "some_app", module: "SomeApp"]
+        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
+        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
+        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
       end
     end
   end
