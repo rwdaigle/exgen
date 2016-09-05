@@ -3,6 +3,10 @@ defmodule <%= module %>.Router do
   import Plug.Conn
   use Plug.Router
 
+  if Mix.env == :dev do
+    use Plug.Debugger
+  end
+
   plug :match
   plug Plug.Parsers, parsers: [:urlencoded, :json], json_decoder: Poison
   plug :dispatch

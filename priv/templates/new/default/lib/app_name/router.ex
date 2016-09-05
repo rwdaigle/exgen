@@ -3,6 +3,10 @@ defmodule <%= module %>.Router do
   import Plug.Conn
   use Plug.Router
 
+  if Mix.env == :dev do
+    use Plug.Debugger
+  end
+
   plug :match
   plug :dispatch
 
@@ -21,7 +25,9 @@ defmodule <%= module %>.Router do
   end
 
   match _ do
-    send_resp(conn, 404, "Unknown request")
+    conn
+    |> put_resp_content_type("text/html")
+    |> send_resp(404, "Unknown request")
   end
 
 end
