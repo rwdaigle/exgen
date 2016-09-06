@@ -1,16 +1,13 @@
-defmodule Mix.Tasks.Plug.New do
+defmodule Mix.Tasks.Exgen.New do
   use Mix.Task
-  import Mix.PlugTasks
+  import Mix.Exgen
 
-  @shortdoc "Generate a simple plug app"
+  @shortdoc "Generate a new project from a template"
 
   @moduledoc """
-  Generate a simple plug app
+  Generate a new project from an Exgen template
 
-      $ mix plug.new ./new_app
-
-  The default router is inflected from the application
-  name.
+      $ mix exgen.new ./new_app https://github.com/rwdaigle/exgen-plug-default.git
   """
   def run(args) do
     %{files: files, context: context} = parse_args(args)
@@ -18,7 +15,7 @@ defmodule Mix.Tasks.Plug.New do
   end
 
   defp render(%{template: template, target: target}, context) do
-    rendered = template |> IO.inspect |> EEx.eval_file(context)
+    rendered = template |> EEx.eval_file(context)
     Mix.Generator.create_file(target, rendered)
   end
 

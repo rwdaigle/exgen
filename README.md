@@ -1,35 +1,35 @@
-# PlugTasks
+# Exgen
 
-A set of Mix tasks to quickly generate Plug-based applications in Elixir that attempt to recreate a Sinatra-like, lightweight, web experience.
-
-While the goal is to eventually provide more customizable options/templates that suit a variety of use-cases, the current target is merely to quickly create a well structured, minimal, JSON-API based, web service.
+A framework for quickly generating Elixir projects from community, or private, templates.
 
 ## Installation
 
-Install the plug tasks Mix archive:
+Install the set of Exgen mix tasks:
 
 ```bash
-$ mix archive.install https://github.com/rwdaigle/plug_tasks/raw/master/archives/plug_tasks-0.3.0.ez
+$ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.4.0.ez
 ```
 
 The tasks will then be available via Mix:
 
 ```bash
-$ mix -h | grep "plug."
-mix plug.new     # Generate a simple plug app
+$ mix -h | grep "exgen."
+mix exgen.new     # Generate a new project from a template
 ```
 
 ## Usage
 
-To generate a Plug app template, pass in the root app path. The app name will be inferred from the path.
+Exgen operates by fetching a templatized app from a remote git repo or a local source. For instance, to quickly generate a basic Plug web app:
 
 ```bash
-$ mix plug.new ./some_app
+$ mix exgen.new ./some_app -t https://github.com/rwdaigle/exgen-plug-default.git
 * creating some_app/lib/some_app.ex
 * creating some_app/lib/some_app/router.ex
 ```
 
-## Testing
+## Contributing
+
+### Testing
 
 Run automated tests:
 
@@ -43,19 +43,19 @@ You can also manually test the tasks by installing the archive locally:
 $ mix do archive.build, archive.install
 ```
 
-## Release
+### Release
 
-Plug tasks are distributed as a mix archive. Build the archive with:
+Exgen is distributed as a mix archive. Build the archive with:
 
 ```bash
 $ mix archive.build
-$ mv plug_tasks-*.ez archives/
+$ mv exgen-*.ez archives/
 ```
 
 ## Todo
 
 Some things I'd like to add include:
 
+* Support dynamic contexts
 * Make this a more general purpose generator library
-* Rename it to exgen
 * Use test tags to segment tests by remote/local

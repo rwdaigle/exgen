@@ -1,4 +1,4 @@
-defmodule Mix.PlugTasks do
+defmodule Mix.Exgen do
 
   def ls_r(file) do
     cond do

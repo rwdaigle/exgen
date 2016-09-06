@@ -1,9 +1,9 @@
-defmodule PlugTasks.Mixfile do
+defmodule ExGen.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :plug_tasks,
-     version: "0.3.0",
+    [app: :exgen,
+     version: "0.4.0",
      elixir: ">= 1.3.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,

@@ -1,6 +1,5 @@
 ExUnit.start()
 
-# From Phoenix mix task test helper
 defmodule MixHelper do
   import ExUnit.Assertions
 

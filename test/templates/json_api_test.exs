@@ -2,7 +2,7 @@ defmodule Templates.JsonApiTest do
 
   use ExUnit.Case, async: true
   import ExUnit.CaptureIO
-  import Mix.PlugTasks
+  import Mix.Exgen
   use Plug.Test
 
   setup do
@@ -18,7 +18,7 @@ defmodule Templates.JsonApiTest do
 
       # Generate and load Plug app
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Plug.New.run [app_name, "-t", "json_api"] end
+        capture_io fn -> Mix.Tasks.Exgen.New.run [app_name, "-t", "json_api"] end
         ls_r(app_name) |> Kernel.ParallelCompiler.files
       end
 
