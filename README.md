@@ -58,3 +58,4 @@ Some things I'd like to add include:
 
 * Make this a more general purpose generator library
 * Rename it to exgen
+* Use test tags to segment tests by remote/local
