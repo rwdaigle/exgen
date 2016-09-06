@@ -46,8 +46,7 @@ defmodule Mix.Tasks.Exgen.New do
       String.ends_with?(template, ".git") ->
         tmp_dir = in_tmp fn -> System.cmd("git", ["clone", template, "exgen"]) end
         "#{tmp_dir}/exgen"
-      true ->
-        Path.expand("../../../priv/templates/new/#{template}", __DIR__)
+      true -> template
     end
   end
 

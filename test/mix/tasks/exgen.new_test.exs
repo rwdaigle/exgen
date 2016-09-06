@@ -10,116 +10,85 @@ defmodule Mix.Tasks.Exgen.NewTest do
     :ok
   end
 
-  describe "exgen.new" do
-
-    test "generates default app in current dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-
-    test "generates default app in relative dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("test/some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-  end
-
   describe "exgen.new from local template" do
 
-    test "generates app in current dir" do
+    setup do
+      {:ok, %{template: Path.expand("../../fixtures/templates/simple", __DIR__)}}
+    end
+
+    test "generates app in current dir", %{template: template} do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", "default"] end
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", template] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
+        assert_rendered_template("some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
       end
     end
 
-    test "generates app in relative dir" do
+    test "generates app in relative dir", %{template: template} do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", "default"] end
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", template] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("test/some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-  end
-
-  describe "exgen.new from git repo" do
-
-    test "generates app using git@ URL in current dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", "git@github.com:rwdaigle/exgen-plug-default.git"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-
-    test "generates app using git@ URL in relative dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", "git@github.com:rwdaigle/exgen-plug-default.git"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("./test/some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("./test/some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("./test/some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-
-    test "generates default app using http URL in current dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", "https://github.com/rwdaigle/exgen-plug-default.git"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
-      end
-    end
-
-    test "generates default app using http URL in relative dir" do
-      in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", "https://github.com/rwdaigle/exgen-plug-default.git"] end
-        expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("./test/some_app/mix.exs", "new/default/mix.exs", expected_context)
-        assert_rendered_template("./test/some_app/lib/some_app.ex", "new/default/lib/app_name.ex", expected_context)
-        assert_rendered_template("./test/some_app/lib/some_app/router.ex", "new/default/lib/app_name/router.ex", expected_context)
+        assert_rendered_template("test/some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("test/some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("test/some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
       end
     end
   end
 
-  describe "exgen.new -t json_api" do
+  describe "exgen.new from SSH git repo" do
 
-    test "generates json_api app in current dir" do
+    setup do
+      url = "git@github.com:rwdaigle/exgen-plug-default.git"
+      {:ok, %{url: url, template: git_clone(url)}}
+    end
+
+    test "generates app in current dir", %{url: url, template: template} do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", "json_api"] end
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", url] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("some_app/mix.exs", "new/json_api/mix.exs", expected_context)
-        assert_rendered_template("some_app/lib/some_app.ex", "new/json_api/lib/app_name.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/router.ex", "new/json_api/lib/app_name/router.ex", expected_context)
-        assert_rendered_template("some_app/lib/some_app/routers/api_v1.ex", "new/json_api/lib/app_name/routers/api_v1.ex", expected_context)
+        assert_rendered_template("some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
       end
     end
 
-    test "generates json_api app in relative dir" do
+    test "generates app in relative dir", %{url: url, template: template} do
       in_tmp fn ->
-        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", "json_api"] end
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", url] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
-        assert_rendered_template("test/some_app/mix.exs", "new/json_api/mix.exs", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app.ex", "new/json_api/lib/app_name.ex", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app/router.ex", "new/json_api/lib/app_name/router.ex", expected_context)
-        assert_rendered_template("test/some_app/lib/some_app/routers/api_v1.ex", "new/json_api/lib/app_name/routers/api_v1.ex", expected_context)
+        assert_rendered_template("./test/some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("./test/some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("./test/some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
+      end
+    end
+  end
+
+  describe "exgen.new from HTTP git repo" do
+
+    setup do
+      url = "https://github.com/rwdaigle/exgen-plug-default.git"
+      {:ok, %{url: url, template: git_clone(url)}}
+    end
+
+    test "generates app in current dir", %{url: url, template: template} do
+      in_tmp fn ->
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", url] end
+        expected_context = [app_name: "some_app", module: "SomeApp"]
+        assert_rendered_template("some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
+      end
+    end
+
+    test "generates app in relative dir", %{url: url, template: template} do
+      in_tmp fn ->
+        capture_io fn -> Mix.Tasks.Exgen.New.run ["./test/some_app", "-t", url] end
+        expected_context = [app_name: "some_app", module: "SomeApp"]
+        assert_rendered_template("./test/some_app/mix.exs", "#{template}/mix.exs", expected_context)
+        assert_rendered_template("./test/some_app/lib/some_app.ex", "#{template}/lib/app_name.ex", expected_context)
+        assert_rendered_template("./test/some_app/lib/some_app/router.ex", "#{template}/lib/app_name/router.ex", expected_context)
       end
     end
   end
