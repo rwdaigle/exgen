@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.Exgen.New do
   use Mix.Task
   import Mix.Exgen
+  import Exgen.Exfile
 
   @shortdoc "Generate a new project from a template"
 
@@ -10,13 +11,16 @@ defmodule Mix.Tasks.Exgen.New do
       $ mix exgen.new ./new_app https://github.com/rwdaigle/exgen-plug-default.git
   """
   def run(args) do
-    %{files: files, context: context} = parse_args(args)
-    files |> Enum.each(&render(&1, context))
-  end
+    {:ok, target, opts} = parse_args(args)
+    {:ok, template_path} = resolve_template(opts[:template])
+    {:ok, exfile} = exfile(template_path, target, opts)
 
-  defp render(%{template: template, target: target}, context) do
-    rendered = template |> EEx.eval_file(context)
-    Mix.Generator.create_file(target, rendered)
+    template_path
+    |> ls_r
+    |> Enum.filter(fn(template_file) -> !String.contains?(template_file, ".git/") end)
+    |> Enum.filter(fn(template_file) -> !String.ends_with?(template_file, "exgen.exs") end)
+    |> Enum.map(fn(template_file) -> [template_file, target_file(exfile, template_file)] end)
+    |> Enum.each(fn([template_file, target_file]) -> render(template_file, target_file, exfile.context) end)
   end
 
   defp parse_args(args) do
@@ -24,50 +28,24 @@ defmodule Mix.Tasks.Exgen.New do
     switches = [template: :string]
     {opts, args, _} = OptionParser.parse(args, switches: switches, aliases: [t: :template])
 
-    default_opts = [template: "default"]
+    default_opts = []
     opts = Keyword.merge(default_opts, opts)
+    target = Enum.at(args, 0)
 
-    with app_path <- Enum.at(args, 0),
-         app_name <- Path.basename(app_path),
-         module <- inflect(app_name),
-         template <- opts[:template] do
-
-      files = template_path(template) |> template_files(app_path, app_name)
-
-      %{
-        files: files,
-        context: [app_name: app_name, module: module]
-      }
-    end
+    {:ok, target, opts}
   end
 
-  defp template_path(template) do
+  defp render(template_file, target_file, context) do
+    rendered = template_file |> EEx.eval_file(context)
+    Mix.Generator.create_file(target_file, rendered)
+  end
+
+  defp resolve_template(template) do
     cond do
       String.ends_with?(template, ".git") ->
         tmp_dir = in_tmp fn -> System.cmd("git", ["clone", template, "exgen"]) end
-        "#{tmp_dir}/exgen"
-      true -> template
+        {:ok, "#{tmp_dir}/exgen"}
+      true -> {:ok, template}
     end
   end
-
-  defp template_files(template_path, target_root, app_name) do
-    template_path
-    |> ls_r
-    |> Enum.filter(fn(file) -> !String.contains?(file, ".git/") end)
-    |> Enum.map(fn(file) -> %{template: file, target: target_file(file, template_path, target_root, app_name)} end)
-  end
-
-  defp target_file(template_file, template_path, target_root, app_name) do
-    template_file
-    |> String.replace_prefix(template_path, target_root)
-    |> String.replace("app_name", app_name)
-  end
-
-  defp inflect(name) do
-    name
-    |> String.split("_")
-    |> Enum.map(&String.capitalize(&1))
-    |> Enum.join("")
-  end
-
 end

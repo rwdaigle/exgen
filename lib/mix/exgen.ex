@@ -1,13 +1,13 @@
 defmodule Mix.Exgen do
 
-  def ls_r(file) do
+  def ls_r(path \\ ".") do
     cond do
-      File.regular?(file) -> [file]
-      File.dir?(file) ->
-        File.ls!(file)
-        |> Enum.map(&Path.expand(&1, file))
+      File.regular?(path) -> [path]
+      File.dir?(path) ->
+        File.ls!(path)
+        |> Enum.map(&Path.join(path, &1))
         |> Enum.map(&ls_r/1)
-        |> Enum.reduce([], fn(files, acc) -> Enum.into(acc, files) end)
+        |> Enum.concat
       true -> []
     end
   end

@@ -5,9 +5,9 @@ defmodule MixHelper do
   import ExUnit.Assertions
   import Mix.Exgen
 
-  def assert_rendered_template(rendered_path, template_path, context) do
-    rendered = File.read!(rendered_path)
+  def assert_rendered_template(template_path, rendered_path, context) do
     template = render(template_path, context)
+    rendered = File.read!(rendered_path)
     assert rendered == template
   end
 
