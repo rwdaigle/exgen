@@ -7,7 +7,7 @@ A framework for quickly generating Elixir projects from community, or private, t
 Install the set of Exgen mix tasks:
 
 ```bash
-$ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.4.0.ez
+$ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.5.0.ez
 ```
 
 The tasks will then be available via Mix:
@@ -56,6 +56,5 @@ $ mv exgen-*.ez archives/
 
 Some things I'd like to add include:
 
-* Support dynamic contexts
-* Make this a more general purpose generator library
+* Silence git output
 * Use test tags to segment tests by remote/local
