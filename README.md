@@ -1,16 +1,27 @@
 # Exgen
 
-A framework for quickly generating Elixir projects from community, or private, templates.
+Quickly generate Elixir apps from templates.
+
+![Screengrab]()
+
+Templates are just [EEx](http://elixir-lang.org/docs/stable/eex/EEx.html) files that are evaluated at runtime. So if you have a templated app:
+
+```bash
+$ ls
+exgen.exs lib       mix.exs
+```
+
+And inside one of the files
 
 ## Installation
 
-Install the set of Exgen mix tasks:
+Exgen is distributed as a set of Mix tasks (much like Phoenix generators). Install them via Mix:
 
 ```bash
 $ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.5.0.ez
 ```
 
-The tasks will then be available via Mix:
+The tasks will then be available in Mix under the `exgen` namespace:
 
 ```bash
 $ mix -h | grep "exgen."

@@ -12,8 +12,12 @@ defmodule Exgen.Command.New do
 
   defp target_file(command, template_file_path) do
     target_file = template_file_path |> Path.relative_to(command.template_path)
-    Path.join(command.target_path, target_file)
-    |> command.module.target_file(command.context)
+    target_file = Path.join(command.target_path, target_file)
+      |> EEx.eval_string(command.context)
+    cond do
+      command.module -> command.module.target_file(target_file, command.context)
+      true -> target_file
+    end
   end
 
   defp render(template_file, target_file, context) do
