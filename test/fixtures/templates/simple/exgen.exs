@@ -1,10 +1,11 @@
-defmodule Web.Simple.Exfile do
-  alias Exgen.Project
+defmodule Web.Simple.Exgen do
+  alias Exgen.Command
+  import Exgen.Util
 
-  def context(project) do
+  def context(%Command{target_path: target_path}) do
     [
-      app_name: Project.target_base(project),
-      module: Project.module_name(project)
+      app_name: target_base(target_path),
+      module: module_name(target_path)
     ]
   end
 

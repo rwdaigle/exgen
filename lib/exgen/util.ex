@@ -1,16 +1,13 @@
-defmodule Exgen.Project do
+defmodule Exgen.Util do
 
-  defstruct target: ".", options: []
-  alias Exgen.Project
-
-  def target_base(%Project{target: target_path}) do
+  def target_base(target_path) do
     target_path
     |> Path.basename
     |> String.replace("-", "_")
   end
 
-  def module_name(project) do
-    project
+  def module_name(target_path) do
+    target_path
     |> target_base
     |> String.split("_")
     |> Enum.map(&String.capitalize(&1))
