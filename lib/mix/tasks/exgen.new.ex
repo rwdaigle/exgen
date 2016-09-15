@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Exgen.New do
   @moduledoc """
   Generate a new project from an Exgen template
 
-      $ mix exgen.new ./new_app https://github.com/rwdaigle/exgen-plug-default.git
+      $ mix exgen.new ./new_app https://github.com/rwdaigle/exgen-plug-simple.git
   """
   def run(args) do
     with {:ok, target, opts} <- parse_args(args),

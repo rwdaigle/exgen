@@ -57,7 +57,7 @@ defmodule Mix.Tasks.Exgen.NewTest do
   describe "exgen.new from SSH git repo" do
 
     setup do
-      url = "git@github.com:rwdaigle/exgen-plug-default.git"
+      url = "git@github.com:rwdaigle/exgen-plug-simple.git"
       {:ok, %{url: url, template: git_clone(url)}}
     end
 
@@ -66,8 +66,8 @@ defmodule Mix.Tasks.Exgen.NewTest do
         capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", url, "--app-name", "some_app", "--module", "SomeApp"] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
         assert_rendered_template("#{template}/mix.exs", "some_app/mix.exs", expected_context)
-        assert_rendered_template("#{template}/lib/app_name.ex", "some_app/lib/some_app.ex", expected_context)
-        assert_rendered_template("#{template}/lib/app_name/router.ex", "some_app/lib/some_app/router.ex", expected_context)
+        assert_rendered_template("#{template}/lib/<%= app_name %>.ex", "some_app/lib/some_app.ex", expected_context)
+        assert_rendered_template("#{template}/lib/<%= app_name %>/router.ex", "some_app/lib/some_app/router.ex", expected_context)
       end
     end
   end
@@ -75,7 +75,7 @@ defmodule Mix.Tasks.Exgen.NewTest do
   describe "exgen.new from HTTP git repo" do
 
     setup do
-      url = "https://github.com/rwdaigle/exgen-plug-default.git"
+      url = "https://github.com/rwdaigle/exgen-plug-simple.git"
       {:ok, %{url: url, template: git_clone(url)}}
     end
 
@@ -84,8 +84,8 @@ defmodule Mix.Tasks.Exgen.NewTest do
         capture_io fn -> Mix.Tasks.Exgen.New.run ["some_app", "-t", url, "--app-name", "some_app", "--module", "SomeApp"] end
         expected_context = [app_name: "some_app", module: "SomeApp"]
         assert_rendered_template("#{template}/mix.exs", "some_app/mix.exs", expected_context)
-        assert_rendered_template("#{template}/lib/app_name.ex", "some_app/lib/some_app.ex", expected_context)
-        assert_rendered_template("#{template}/lib/app_name/router.ex", "some_app/lib/some_app/router.ex", expected_context)
+        assert_rendered_template("#{template}/lib/<%= app_name %>.ex", "some_app/lib/some_app.ex", expected_context)
+        assert_rendered_template("#{template}/lib/<%= app_name %>/router.ex", "some_app/lib/some_app/router.ex", expected_context)
       end
     end
   end
