@@ -2,7 +2,7 @@
 
 Quickly generate Elixir apps from templates.
 
-![Screengrab]()
+![Screengrab](http://share.ryandaigle.com/jlonw-20160915161812.gif)
 
 Templates are just [EEx](http://elixir-lang.org/docs/stable/eex/EEx.html) files that are evaluated at runtime. A simple template might be a single file with a variable substitution in EEx form:
 
@@ -29,7 +29,7 @@ end
 Exgen is distributed as a set of Mix tasks (much like Phoenix generators). Install them via Mix:
 
 ```bash
-$ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.5.0.ez
+$ mix archive.install https://github.com/rwdaigle/exgen/raw/master/archives/exgen-0.5.1.ez
 ```
 
 The tasks will then be available in Mix under the `exgen` namespace:
