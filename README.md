@@ -2,7 +2,13 @@
 
 Quickly generate Elixir apps from templates.
 
-![Screengrab](http://share.ryandaigle.com/14mj6-20160921120503.gif)
+```bash
+$ mix exgen.new some_app -t https://github.com/rwdaigle/exgen-plug-simple.git --app-name some_app --module SomeApp
+* creating some_app/lib/some_app.ex
+* creating some_app/lib/some_app/router.ex
+```
+
+## Overview
 
 Templates are just [EEx](http://elixir-lang.org/docs/stable/eex/EEx.html) files that are evaluated at runtime. A simple template might be a single file with a variable substitution in EEx form:
 
