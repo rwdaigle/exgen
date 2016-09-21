@@ -2,7 +2,7 @@
 
 Quickly generate Elixir apps from templates.
 
-![Screengrab](http://share.ryandaigle.com/jlonw-20160915161812.gif)
+![Screengrab](http://share.ryandaigle.com/14mj6-20160921120503.gif)
 
 Templates are just [EEx](http://elixir-lang.org/docs/stable/eex/EEx.html) files that are evaluated at runtime. A simple template might be a single file with a variable substitution in EEx form:
 
