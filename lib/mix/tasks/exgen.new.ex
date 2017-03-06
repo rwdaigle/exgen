@@ -18,10 +18,10 @@ defmodule Mix.Tasks.Exgen.New do
     end
   end
 
-  defp parse_args(args) do
+  def parse_args(args) do
 
     switches = [template: :string]
-    {opts, args, _} = OptionParser.parse(args, switches: switches, aliases: [t: :template])
+    {opts, args, _} = OptionParser.parse(args, switches: switches, aliases: [t: :template], allow_nonexistent_atoms: true)
 
     default_opts = []
     opts = Keyword.merge(default_opts, opts)
