@@ -129,3 +129,15 @@ Some things I'd like to add include:
 * Support testing workflow for template authors
 * Silence git output (in tests at least)
 * Use test tags to segment tests by remote/local
+
+## Contributors
+
+Code contributors include:
+
+* [jknipp](https://github.com/jknipp)
+
+## Changelog
+
+### 0.5.2
+
+* Support dynamic switch in Elixir 1.4

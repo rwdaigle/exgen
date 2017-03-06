@@ -89,4 +89,15 @@ defmodule Mix.Tasks.Exgen.NewTest do
       end
     end
   end
+
+  describe "exgen.new with dynamic switches" do
+
+    test "parses dynamic switches" do
+      args = ["some_app", "-t", "https://github.com/rwdaigle/exgen-plug-simple.git", "--app-name", "some_app", "--module", "SomeApp"]
+      {:ok, target, opts} = Mix.Tasks.Exgen.New.parse_args(args)
+      expected_opts = [template: "https://github.com/rwdaigle/exgen-plug-simple.git", app_name: "some_app", module: "SomeApp"]
+      assert opts == expected_opts
+    end
+
+  end
 end
